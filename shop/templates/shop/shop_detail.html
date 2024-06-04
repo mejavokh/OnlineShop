@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+
+{% block title %}
+{{ title }}
+{% endblock title %}
+
+{% block main %}
+<div class="m-3">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="card" style="width: 18rem;">
+                <div class="card-header">
+                    <h3>
+                        <b><i>КАТАЛОГ
+                            <hr>
+                            {{category.title}}</i></b>
+                    </h3>
+                </div>
+                <div class="categories d-flex justify-content-between">
+                    <ul class="list-group list-group-flush">
+                        {% for category in categories %}
+                        <li class="list-group-item">
+                            <a class="btn" href="{% url 'main:category_page' category.id %}">
+                                <b>{{ category.title }}</b>
+                            </a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            <div class="card mt-3 mb-3" style="width: 18rem;">
+                <a href="{% url 'basket:my_basket' %}" class="btn btn-outline-success m-2">Kорзинa</a>
+                <a href="{% url 'favorites:favorite_list' %}" class="btn btn-outline-danger m-2">Избранное</a>
+            </div>
+        </div>
+
+        <div class="col-md-9">
+            <div class="row row-cols-1 row-cols-md-3 g-4">
+
+                <div class="card m-2" style="width: 18rem;">
+                    <img class="card-img-top img-fluid" src="{{ product.photo.url }}"
+                         style="width: 150px; height: 150px;" alt="Small image">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            {{title}}
+                        </h5>
+                        <h6 class="card-title">Категория</h6>
+                        <p class="card-text">{{ product.category }}</p>
+                        <h6 class="card-title">Описание</h6>
+                        <p class="card-text">{{ product.description }}</p>
+                        <h6 class="card-title">Цена</h6>
+                        <p class="card-text">{{ product.price }}</p>
+                    </div>
+                </div>
+
+                {% if comments %}
+                <div class="card mt-3 shadow p-3">
+                    <div class="card-header">
+                        <div class="text-center">Комментарий</div>
+                    </div>
+                    <div class="mt-2">
+                        {% for comment in comments %}
+                        <h4>{{ comment.author }}</h4>
+                        <p>{{ comment.text }}</p>
+                        <h6>{{ comment.created_at }}</h6>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+
+                {% if request.user.is_authenticated %}
+                <div class="card mt-3 shadow p-3">
+                    <form action="{% url 'main:save_comment' product.id %}"
+                          method="post">
+                        {% csrf_token %}
+                        {{ comment_form.as_p }}
+                        <button type="submit" class="btn btn-primary">
+                            Оставить комментарий
+                        </button>
+                    </form>
+                </div>
+                {% endif %}
+
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock main %}

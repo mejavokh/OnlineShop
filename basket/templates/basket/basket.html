@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block title %}
+{{ title }}
+{% endblock title %}
+
+{% block main %}
+<div class="m-3">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="card" style="width: 18rem;">
+                <div class="card-header">
+                    <h3>
+                        <b><i>КАТАЛОГ
+                            <hr>
+                            {{category.title}}</i></b>
+                    </h3>
+                </div>
+                <div class="categories d-flex justify-content-between">
+                    <ul class="list-group list-group-flush">
+                        {% for category in categories %}
+                        <li class="list-group-item">
+                            <a class="btn" href="{% url 'main:category_page' category.id %}">
+                                <b>{{ category.title }}</b>
+                            </a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            <div class="card mt-3 mb-3" style="width: 18rem;">
+                <a href="{% url 'basket:my_basket' %}" class="btn btn-outline-success m-2">Kорзинa</a>
+                <a href="{% url 'favorites:favorite_list' %}" class="btn btn-outline-danger m-2">Избранное</a>
+            </div>
+        </div>
+
+        <div class="col-md-9">
+            <div class="row row-cols-1 row-cols-md-3 g-4">
+                {% for basket in baskets %}
+                <div class="card m-2" style="width: 18rem;">
+                    <img class="card-img-top img-fluid" src="{{basket.product.photo.url}}"
+                         style="width: 150px; height: 150px;" alt="Small image">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            {{ basket.product.title}}
+                        </h5>
+                        <h6 class="card-title">Категория</h6>
+                        <p class="card-text">{{ basket.product.category }}</p>
+                        <h6 class="card-title">Описание</h6>
+                        <p class="card-text">{{ basket.product.description|truncatewords:5 }}</p>
+                        <h6 class="card-title">Цена</h6>
+                        <p class="card-text">{{ basket.product.price }}</p>
+                        <a href="{% url 'basket:basket_remove' basket_id=basket.id %}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                 class="bi bi-trash-fill" viewBox="0 0 16 16">
+                                <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock main %}

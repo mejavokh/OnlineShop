@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block title %}
+{{ title }}
+{% endblock title %}
+
+{% block main %}
+
+<div class="container m7-3">
+    <div class="row">
+        <div class="container">
+
+        </div>
+        <div class="container col-md-8 ">
+            <form action="{% url 'search:search' %}" method="get">
+                {% csrf_token %}
+                {{ form.as_p}}
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Поиск товара</button>
+            </form>
+            {% for product in products %}
+            <div class="container m7-3">
+                <div class="row">
+                    <div class="container col-md-8 ">
+                        <div class="card m-2" style="width: 18rem;">
+                            <img class="card-img-top img-fluid" src="{{ product.photo.url }}"
+                                 style="width: 150px; height: 150px;" alt="Small image">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ product.title }}</h5>
+                                <h6 class="card-title">Категория</h6>
+                                <p class="card-text">{{ product.category }}</p>
+                                <h6 class="card-title">Описание</h6>
+                                <p class="card-text">{{ product.description|truncatewords:5 }}</p>
+                                <h6 class="card-title">Цена</h6>
+                                <p class="card-text">{{ product.price }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+{% endblock main %}
